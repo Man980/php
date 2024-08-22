@@ -1,28 +1,27 @@
-
 <?php
 session_start();
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "urh";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $sql = "SELECT * FROM users WHERE username='$username' AND password='$password'";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        $_SESSION['loggedin'] = true;
-        header("Location: inscriptions.php");
+    
+    if ($username == "admin" && $password == "admin") {
+        $_SESSION['user_logged_in'] = true;
+        $_SESSION['username'] = $username;
+        header("Location: inscriptions.php"); // Redirection après connexion
+        exit();
     } else {
-        echo "Nom d'utilisateur ou mot de passe incorrect";
+        $error_message = "Nom d'utilisateur ou mot de passe incorrect.";
     }
 }
 ?>
+
+
+<?php if (isset($error_message)): ?>
+        <p style="color: red;"><?php echo $error_message; ?></p>
+    <?php endif; ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
